@@ -9,6 +9,7 @@ public class Solver {
     private List<Job> jobList;
     private List<Machine> machineList;
     private Constrict constrict;
+
     private List<Integer> result;
     private Map<Integer, Boolean> jobSearchMap;
 
