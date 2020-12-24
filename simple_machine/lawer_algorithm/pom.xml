@@ -25,4 +25,11 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <distributionManagement>
+        <repository>
+            <id>github-release</id>
+            <name>GitHub Release</name>
+            <url>https://maven.pkg.github.com/niu99k/scheduling_algorithm</url>
+        </repository>
+    </distributionManagement>
 </project>
