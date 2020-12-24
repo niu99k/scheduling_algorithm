@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Solver {
     private List<Job> jobList;
-    private List<Machine> machineList;
+    private Machine machine;
     private Constrict constrict;
 
     private List<Integer> result;
@@ -28,6 +28,8 @@ public class Solver {
             jobStack.push(jobWithNoSucAndMinConstrict(jobSearchMap()));
             jobSearchMap().put(jobWithNoSucAndMinConstrict(jobSearchMap()).getId(), true);
         }
+
+        result = new ArrayList<>();
         while (!jobStack.isEmpty()) {
             result.add(jobStack.pop().getId());
         }
@@ -36,8 +38,9 @@ public class Solver {
     private Job jobWithNoSucAndMinConstrict(Map<Integer, Boolean> jobSearchMap) {
         Job result;
         result = jobList.stream()
+                .filter(job -> !jobSearchMap.get(job.getId()))
                 .filter(job -> jobWithNoSucOrSearchedSuc(job, jobSearchMap))
-                .min((job1, job2) -> {
+                .max((job1, job2) -> {
                     return constrict.constrict(job1.getId()) - constrict.constrict(job2.getId());
                 })
                 .get();
@@ -46,9 +49,9 @@ public class Solver {
 
     private boolean jobWithNoSucOrSearchedSuc(Job job, Map<Integer, Boolean> jobSearchMap) {
         boolean result;
-        if (isJobNoSuc(job)) {
+        if (isJobSucAllSearched(job, jobSearchMap)) {
             result = true;
-        } else if (isJobSucAllSearched(job, jobSearchMap)) {
+        } else if (isJobNoSuc(job)) {
             result = true;
         } else {
             result = false;
@@ -67,7 +70,8 @@ public class Solver {
 
     private boolean isJobNoSuc(Job job) {
         boolean result;
-        result = job.getPrecNext() == null || job.getPrecNext().isEmpty();
+        result = job.getPrecNext() == null
+                || job.getPrecNext().isEmpty();
         return result;
     }
 
@@ -90,5 +94,45 @@ public class Solver {
                 .findAny()
                 .isPresent();
         return result;
+    }
+
+    public List<Job> getJobList() {
+        return jobList;
+    }
+
+    public void setJobList(List<Job> jobList) {
+        this.jobList = jobList;
+    }
+
+    public Machine getMachine() {
+        return machine;
+    }
+
+    public void setMachine(Machine machine) {
+        this.machine = machine;
+    }
+
+    public Constrict getConstrict() {
+        return constrict;
+    }
+
+    public void setConstrict(Constrict constrict) {
+        this.constrict = constrict;
+    }
+
+    public List<Integer> getResult() {
+        return result;
+    }
+
+    public void setResult(List<Integer> result) {
+        this.result = result;
+    }
+
+    public Map<Integer, Boolean> getJobSearchMap() {
+        return jobSearchMap;
+    }
+
+    public void setJobSearchMap(Map<Integer, Boolean> jobSearchMap) {
+        this.jobSearchMap = jobSearchMap;
     }
 }

@@ -1,5 +1,5 @@
 package com.gg;
 
 public interface Constrict {
-    int constrict(int jobIndex);
+    int constrict(int jobId);
 }
